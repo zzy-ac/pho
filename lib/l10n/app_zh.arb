@@ -8,6 +8,14 @@
     "backgroundSync": "后台同步",
     "autoSyncOnLaunch": "打开应用自动同步",
     "autoSyncOnLaunchDesc": "每次打开应用时自动将新照片同步到云端",
+    "autoSyncStarted": "正在自动同步新照片…",
+    "autoSyncResult": "自动同步完成：成功 {success} 张，失败 {failed} 张",
+    "@autoSyncResult": {
+      "placeholders": {
+        "success": { "type": "int" },
+        "failed": { "type": "int" }
+      }
+    },
     "notSync": "张照片尚未同步",
     "unsynchronizedPhotos": "未同步照片",
     "date": "日期",

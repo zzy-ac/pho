@@ -152,6 +152,18 @@ abstract class AppLocalizations {
   /// **'Automatically sync new photos to cloud when the app is opened'**
   String get autoSyncOnLaunchDesc;
 
+  /// No description provided for @autoSyncStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto sync started…'**
+  String get autoSyncStarted;
+
+  /// No description provided for @autoSyncResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto sync finished: {success} succeeded, {failed} failed'**
+  String autoSyncResult(int success, int failed);
+
   /// No description provided for @notSync.
   ///
   /// In en, this message translates to:

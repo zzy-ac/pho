@@ -8,6 +8,14 @@
   "backgroundSync": "Auto Sync",
   "autoSyncOnLaunch": "Auto sync on launch",
   "autoSyncOnLaunchDesc": "Automatically sync new photos to cloud when the app is opened",
+  "autoSyncStarted": "Auto sync started…",
+  "autoSyncResult": "Auto sync finished: {success} succeeded, {failed} failed",
+  "@autoSyncResult": {
+    "placeholders": {
+      "success": { "type": "int" },
+      "failed": { "type": "int" }
+    }
+  },
   "notSync": "not sync",
   "unsynchronizedPhotos": "Unsynchronized photos",
   "date": "Date",

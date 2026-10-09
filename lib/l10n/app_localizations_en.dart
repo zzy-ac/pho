@@ -37,6 +37,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Automatically sync new photos to cloud when the app is opened';
 
   @override
+  String get autoSyncStarted => 'Auto sync started…';
+
+  @override
+  String autoSyncResult(int success, int failed) {
+    return 'Auto sync finished: $success succeeded, $failed failed';
+  }
+
+  @override
   String get notSync => 'not sync';
 
   @override
