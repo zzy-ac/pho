@@ -115,6 +115,25 @@ class SettingModel extends ChangeNotifier {
     } catch (_) {}
   }
 
+  // 1.5 打开应用自动同步 (Auto Sync on Launch)
+  bool _autoSyncOnLaunch = false;
+  bool get autoSyncOnLaunch => _autoSyncOnLaunch;
+  set autoSyncOnLaunch(bool value) => setAutoSyncOnLaunch(value);
+
+  void setAutoSyncOnLaunch(bool enabled) {
+    if (_autoSyncOnLaunch == enabled) return;
+    _autoSyncOnLaunch = enabled;
+    notifyListeners();
+    _saveAutoSyncOnLaunch();
+  }
+
+  Future<void> _saveAutoSyncOnLaunch() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('auto_sync_on_launch', _autoSyncOnLaunch);
+    } catch (_) {}
+  }
+
   // 2. 文件筛选器 (File Filter)
   bool filterSwitch = false; // 筛选器总开关
   bool filterNoVideo = false; // 过滤视频（只同步照片）
@@ -242,6 +261,7 @@ class SettingModel extends ChangeNotifier {
     await _saveFilterSettings();
     await _saveDebugMode();
     await _saveDefaultAlbumName();
+    await _saveAutoSyncOnLaunch();
   }
 
   Future<void> loadSettings([SharedPreferences? sharedPrefs]) async {
@@ -251,6 +271,7 @@ class SettingModel extends ChangeNotifier {
       if (pCount != null) {
         _parallelCount = pCount.clamp(1, 8);
       }
+      _autoSyncOnLaunch = prefs.getBool('auto_sync_on_launch') ?? false;
       filterSwitch = prefs.getBool('filter_switch') ?? false;
       filterNoVideo = prefs.getBool('filter_no_video') ?? false;
       filterNoImage = prefs.getBool('filter_no_image') ?? false;
@@ -476,6 +497,8 @@ class AssetModel extends ChangeNotifier {
   List<Asset> remoteAssets = [];
   final Set<String> _localAssetIds = {};
   bool _isRefreshingLocal = false;
+  /// 本地相册是否正在刷新中（供启动自动同步等逻辑等待刷新完成）
+  bool get isLocalRefreshing => _isRefreshingLocal;
   int columCount = 4;
   int pageSize = 500;
   bool localHasMore = true;

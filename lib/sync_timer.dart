@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:img_syncer/storage/storage.dart';
 import 'package:img_syncer/global.dart';
+import 'package:img_syncer/logger/logger.dart';
 import 'package:img_syncer/sync/background_runner.dart';
 import 'package:img_syncer/sync/bg_task_scheduler.dart';
 
@@ -104,4 +105,52 @@ Future<List<AssetEntity>> getPhotos() async {
     }
   }
   return all;
+}
+
+/// 打开应用自动同步：应用启动后自动将未同步的照片同步到云端。
+/// 由设置页的「打开应用自动同步」开关（settingModel.autoSyncOnLaunch）控制，
+/// 仅在用户开启开关且已配置网络存储时生效。
+Future<void> runAutoSyncOnLaunch() async {
+  try {
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      return;
+    }
+    if (!settingModel.autoSyncOnLaunch) return;
+    if (settingModel.localFolder.isEmpty || !settingModel.isRemoteStorageSetted) {
+      return;
+    }
+    // 等待启动时 Global.init 触发的本地相册刷新完成，避免拿到空列表导致
+    // refreshUnsynchronizedPhotos 误清空 syncedIDs 后全量重传。
+    for (var i = 0; i < 150; i++) {
+      if (assetModel.isLocalRefreshing) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      } else {
+        break;
+      }
+    }
+    if (assetModel.localAssets.isEmpty) {
+      // 本地相册尚未加载则先刷新本地（refreshLocal 末尾会刷新未同步集合）
+      await assetModel.refreshLocal(true);
+    } else {
+      await refreshUnsynchronizedPhotos();
+    }
+    final Map<String, bool> uploadedIds = {};
+    for (final id in stateModel.syncedIDs) {
+      uploadedIds[id] = true;
+    }
+    final entities = await getPhotos();
+    final all = entities.map((e) => Asset(local: e)).toList();
+    // 重置中断标志：启动自动同步独立于手动 sync 的 stop 状态。
+    stateModel.needStopSync = false;
+    await runSyncOnce(
+      storage: storageClient,
+      assets: all,
+      uploadedIds: uploadedIds,
+      parallelCount: settingModel.parallelCount,
+      shouldStop: () => stateModel.needStopSync,
+      refreshUnSync: true,
+    );
+  } catch (e) {
+    logger.addLog("auto sync on launch failed: $e");
+  }
 }

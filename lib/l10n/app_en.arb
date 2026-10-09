@@ -6,6 +6,8 @@
   "localFolder": "Local folder",
   "cloudStorage": "Cloud storage",
   "backgroundSync": "Auto Sync",
+  "autoSyncOnLaunch": "Auto sync on launch",
+  "autoSyncOnLaunchDesc": "Automatically sync new photos to cloud when the app is opened",
   "notSync": "not sync",
   "unsynchronizedPhotos": "Unsynchronized photos",
   "date": "Date",

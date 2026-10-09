@@ -30,6 +30,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backgroundSync => '后台同步';
 
   @override
+  String get autoSyncOnLaunch => '打开应用自动同步';
+
+  @override
+  String get autoSyncOnLaunchDesc => '每次打开应用时自动将新照片同步到云端';
+
+  @override
   String get notSync => '张照片尚未同步';
 
   @override

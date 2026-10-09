@@ -13,6 +13,7 @@ import 'package:img_syncer/state_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'gallery_body.dart';
 import 'sync_body.dart';
+import 'sync_timer.dart';
 import 'settings_route.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -211,6 +212,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         stateModel.setOnline(!results.contains(ConnectivityResult.none));
       });
     }
+    // 打开应用自动同步：首帧渲染完成后触发（受设置页开关 autoSyncOnLaunch 控制）
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(runAutoSyncOnLaunch());
+    });
     super.initState();
   }
 

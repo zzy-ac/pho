@@ -30,6 +30,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backgroundSync => 'Auto Sync';
 
   @override
+  String get autoSyncOnLaunch => 'Auto sync on launch';
+
+  @override
+  String get autoSyncOnLaunchDesc =>
+      'Automatically sync new photos to cloud when the app is opened';
+
+  @override
   String get notSync => 'not sync';
 
   @override

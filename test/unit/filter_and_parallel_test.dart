@@ -296,4 +296,57 @@ void main() {
       expect(shouldSyncAsset(afterRange, '5', {}, '.jpg'), isFalse);
     });
   });
+
+  group('SettingModel 打开应用自动同步 (Auto Sync on Launch)', () {
+    late SettingModel sm;
+
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+      sm = SettingModel();
+    });
+
+    test('默认关闭', () {
+      expect(sm.autoSyncOnLaunch, isFalse);
+    });
+
+    test('设置开关并通知监听器', () {
+      var notified = false;
+      sm.addListener(() {
+        notified = true;
+      });
+
+      sm.setAutoSyncOnLaunch(true);
+      expect(sm.autoSyncOnLaunch, isTrue);
+      expect(notified, isTrue);
+
+      // 设置相同值不重复触发 notify
+      notified = false;
+      sm.setAutoSyncOnLaunch(true);
+      expect(notified, isFalse);
+    });
+
+    test('持久化与从 SharedPreferences 恢复', () async {
+      final prefs = await SharedPreferences.getInstance();
+      sm.setAutoSyncOnLaunch(true);
+      await sm.saveSettings();
+
+      expect(prefs.getBool('auto_sync_on_launch'), isTrue);
+
+      final sm2 = SettingModel();
+      await sm2.loadSettings(prefs);
+      expect(sm2.autoSyncOnLaunch, isTrue);
+
+      // 关闭后持久化为 false
+      sm.setAutoSyncOnLaunch(false);
+      await sm.saveSettings();
+      expect(prefs.getBool('auto_sync_on_launch'), isFalse);
+    });
+
+    test('未持久化时 loadSettings 恢复为默认关闭', () async {
+      final prefs = await SharedPreferences.getInstance();
+      final sm2 = SettingModel();
+      await sm2.loadSettings(prefs);
+      expect(sm2.autoSyncOnLaunch, isFalse);
+    });
+  });
 }

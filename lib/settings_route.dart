@@ -191,7 +191,7 @@ class SettingsRouteState extends State<SettingsRoute> {
               ),
             ),
           ),
-          if (Platform.isAndroid || Platform.isIOS)
+          if (Platform.isAndroid || Platform.isIOS) ...[
             tile(
               Icons.cloud_sync_outlined,
               l10n.backgroundSync,
@@ -203,6 +203,32 @@ class SettingsRouteState extends State<SettingsRoute> {
                 ),
               ),
             ),
+            // 打开应用自动同步：开关自由控制是否在每次打开应用时自动同步照片
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.paddingSmall),
+              child: SwitchListTile(
+                secondary: Icon(
+                  Icons.rocket_launch_outlined,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                title: Text(
+                  l10n.autoSyncOnLaunch,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                subtitle: Text(
+                  l10n.autoSyncOnLaunchDesc,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                value: settingModel.autoSyncOnLaunch,
+                onChanged: (bool value) {
+                  settingModel.setAutoSyncOnLaunch(value);
+                },
+              ),
+            ),
+          ],
           tile(
             Icons.speed,
             l10n.parallelUpload,

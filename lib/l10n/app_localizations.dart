@@ -140,6 +140,18 @@ abstract class AppLocalizations {
   /// **'Auto Sync'**
   String get backgroundSync;
 
+  /// No description provided for @autoSyncOnLaunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto sync on launch'**
+  String get autoSyncOnLaunch;
+
+  /// No description provided for @autoSyncOnLaunchDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically sync new photos to cloud when the app is opened'**
+  String get autoSyncOnLaunchDesc;
+
   /// No description provided for @notSync.
   ///
   /// In en, this message translates to:
