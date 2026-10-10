@@ -125,6 +125,15 @@ Future<void> runAutoSyncOnLaunch() async {
       return;
     }
     if (!settingModel.autoSyncOnLaunch) return;
+    // 仅连接 WIFI 时同步：当前非 WIFI 网络则跳过本次启动自动同步
+    if (settingModel.autoSyncWifiOnly) {
+      final results = await Connectivity().checkConnectivity();
+      if (!results.contains(ConnectivityResult.wifi)) {
+        logger.addLog(
+            "auto sync on launch skipped: wifi only, current network: $results");
+        return;
+      }
+    }
     final deadline = DateTime.now().add(const Duration(seconds: 120));
 
     // 1. 等待远程存储配置完成（initDrive 在 Global.init 中异步执行）

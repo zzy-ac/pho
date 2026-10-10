@@ -203,29 +203,67 @@ class SettingsRouteState extends State<SettingsRoute> {
                 ),
               ),
             ),
-            // 打开应用自动同步：开关自由控制是否在每次打开应用时自动同步照片
+            // 自动同步分组：打开应用自动同步 + 仅在连接 WIFI 时同步
             Container(
-              padding: const EdgeInsets.all(AppSpacing.paddingSmall),
-              child: SwitchListTile(
-                secondary: Icon(
-                  Icons.rocket_launch_outlined,
-                  size: 28,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                title: Text(
-                  l10n.autoSyncOnLaunch,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                subtitle: Text(
-                  l10n.autoSyncOnLaunchDesc,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+              margin: const EdgeInsets.all(AppSpacing.paddingSmall),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(AppRadius.medium),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.rocket_launch_outlined,
+                      size: 28,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.autoSyncOnLaunch,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    subtitle: Text(
+                      l10n.autoSyncOnLaunchDesc,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    value: settingModel.autoSyncOnLaunch,
+                    onChanged: (bool value) {
+                      settingModel.setAutoSyncOnLaunch(value);
+                    },
                   ),
-                ),
-                value: settingModel.autoSyncOnLaunch,
-                onChanged: (bool value) {
-                  settingModel.setAutoSyncOnLaunch(value);
-                },
+                  const Divider(
+                    height: 1,
+                    indent: 56,
+                    endIndent: 16,
+                  ),
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.wifi,
+                      size: 28,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.autoSyncWifiOnly,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    subtitle: Text(
+                      l10n.autoSyncWifiOnlyDesc,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    value: settingModel.autoSyncWifiOnly,
+                    // 主开关关闭时置灰，避免产生无意义的独立配置
+                    onChanged: settingModel.autoSyncOnLaunch
+                        ? (bool value) {
+                            settingModel.setAutoSyncWifiOnly(value);
+                          }
+                        : null,
+                  ),
+                ],
               ),
             ),
           ],

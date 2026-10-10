@@ -8,6 +8,8 @@
   "backgroundSync": "Auto Sync",
   "autoSyncOnLaunch": "Auto sync on launch",
   "autoSyncOnLaunchDesc": "Automatically sync new photos to cloud when the app is opened",
+  "autoSyncWifiOnly": "Sync only on WIFI",
+  "autoSyncWifiOnlyDesc": "Run launch auto-sync only when connected to WIFI to save mobile data",
   "autoSyncStarted": "Auto sync started…",
   "autoSyncResult": "Auto sync finished: {success} succeeded, {failed} failed",
   "@autoSyncResult": {

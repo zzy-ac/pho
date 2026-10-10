@@ -37,6 +37,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Automatically sync new photos to cloud when the app is opened';
 
   @override
+  String get autoSyncWifiOnly => 'Sync only on WIFI';
+
+  @override
+  String get autoSyncWifiOnlyDesc =>
+      'Run launch auto-sync only when connected to WIFI to save mobile data';
+
+  @override
   String get autoSyncStarted => 'Auto sync started…';
 
   @override

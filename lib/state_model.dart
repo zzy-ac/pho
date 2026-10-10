@@ -134,6 +134,25 @@ class SettingModel extends ChangeNotifier {
     } catch (_) {}
   }
 
+  // 1.6 打开应用自动同步：仅在连接 WIFI 时同步 (WIFI-only on launch)
+  bool _autoSyncWifiOnly = false;
+  bool get autoSyncWifiOnly => _autoSyncWifiOnly;
+  set autoSyncWifiOnly(bool value) => setAutoSyncWifiOnly(value);
+
+  void setAutoSyncWifiOnly(bool enabled) {
+    if (_autoSyncWifiOnly == enabled) return;
+    _autoSyncWifiOnly = enabled;
+    notifyListeners();
+    _saveAutoSyncWifiOnly();
+  }
+
+  Future<void> _saveAutoSyncWifiOnly() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('auto_sync_wifi_only', _autoSyncWifiOnly);
+    } catch (_) {}
+  }
+
   // 2. 文件筛选器 (File Filter)
   bool filterSwitch = false; // 筛选器总开关
   bool filterNoVideo = false; // 过滤视频（只同步照片）
@@ -262,6 +281,7 @@ class SettingModel extends ChangeNotifier {
     await _saveDebugMode();
     await _saveDefaultAlbumName();
     await _saveAutoSyncOnLaunch();
+    await _saveAutoSyncWifiOnly();
   }
 
   Future<void> loadSettings([SharedPreferences? sharedPrefs]) async {
@@ -272,6 +292,7 @@ class SettingModel extends ChangeNotifier {
         _parallelCount = pCount.clamp(1, 8);
       }
       _autoSyncOnLaunch = prefs.getBool('auto_sync_on_launch') ?? false;
+      _autoSyncWifiOnly = prefs.getBool('auto_sync_wifi_only') ?? false;
       filterSwitch = prefs.getBool('filter_switch') ?? false;
       filterNoVideo = prefs.getBool('filter_no_video') ?? false;
       filterNoImage = prefs.getBool('filter_no_image') ?? false;

@@ -36,6 +36,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get autoSyncOnLaunchDesc => '每次打开应用时自动将新照片同步到云端';
 
   @override
+  String get autoSyncWifiOnly => '仅在连接WIFI时同步';
+
+  @override
+  String get autoSyncWifiOnlyDesc => '仅在连接 WIFI 时执行打开应用自动同步，节省移动数据';
+
+  @override
   String get autoSyncStarted => '正在自动同步新照片…';
 
   @override

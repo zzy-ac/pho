@@ -152,6 +152,18 @@ abstract class AppLocalizations {
   /// **'Automatically sync new photos to cloud when the app is opened'**
   String get autoSyncOnLaunchDesc;
 
+  /// No description provided for @autoSyncWifiOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync only on WIFI'**
+  String get autoSyncWifiOnly;
+
+  /// No description provided for @autoSyncWifiOnlyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Run launch auto-sync only when connected to WIFI to save mobile data'**
+  String get autoSyncWifiOnlyDesc;
+
   /// No description provided for @autoSyncStarted.
   ///
   /// In en, this message translates to:
