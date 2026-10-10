@@ -16,7 +16,6 @@ import 'sync_body.dart';
 import 'sync_timer.dart';
 import 'settings_route.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/services.dart';
 import 'package:img_syncer/l10n/app_localizations.dart';
 import 'package:img_syncer/theme.dart';
@@ -124,28 +123,15 @@ class MyApp extends StatelessWidget {
       systemNavigationBarColor: Colors.transparent, // 设置导航栏颜色为透明
       systemNavigationBarDividerColor: Colors.transparent, // 设置导航栏分隔线颜色为透明
     ));
-    return DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) {
-        late ColorScheme lightColorScheme;
-        late ColorScheme darkColorScheme;
-        if (lightDynamic != null) {
-          lightColorScheme = lightDynamic.harmonized();
-        } else {
-          print("lightDynamic is null");
-          lightColorScheme = ColorScheme.fromSeed(
-            seedColor: seedColor ?? seedThemeColors[0],
-            brightness: Brightness.light,
-          );
-        }
-        if (darkDynamic != null) {
-          darkColorScheme = darkDynamic.harmonized();
-        } else {
-          print("darkDynamic is null");
-          darkColorScheme = ColorScheme.fromSeed(
-            seedColor: seedColor ?? seedThemeColors[0],
-            brightness: Brightness.dark,
-          );
-        }
+    return Builder(
+      builder: (context) {
+        // 固定蓝色主题：亮色模式白色底色，暗色模式由同一蓝色种子生成
+        final ColorScheme lightColorScheme =
+            buildLightColorScheme(seedColor ?? seedThemeColors[0]);
+        final ColorScheme darkColorScheme = ColorScheme.fromSeed(
+          seedColor: seedColor ?? seedThemeColors[0],
+          brightness: Brightness.dark,
+        );
 
         var lightTheme = buildThemeData(
           colorScheme: lightColorScheme,
@@ -195,10 +181,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         seedColor = Color(seedColorValue);
         AdaptiveTheme.of(context).setTheme(
           light: buildThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: seedColor!,
-              brightness: Brightness.light,
-            ),
+            colorScheme: buildLightColorScheme(seedColor!),
             brightness: Brightness.light,
           ),
         );
@@ -326,6 +309,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 }
 
+/// 亮色模式 ColorScheme：白色底色 + 蓝色主题色。
+/// 将 M3 从种子色推导出的底色角色固定为纯白，保持卡片的浅色容器层次。
+ColorScheme buildLightColorScheme(Color seedColor) {
+  final base = ColorScheme.fromSeed(
+    seedColor: seedColor,
+    brightness: Brightness.light,
+  );
+  return base.copyWith(
+    surface: Colors.white,
+    surfaceContainerLowest: Colors.white,
+  );
+}
+
 ThemeData buildThemeData({
   required ColorScheme colorScheme,
   required Brightness brightness,
@@ -333,6 +329,7 @@ ThemeData buildThemeData({
   return ThemeData(
     colorScheme: colorScheme,
     useMaterial3: true,
+    scaffoldBackgroundColor: colorScheme.surface,
     textTheme: textTheme,
     navigationBarTheme: brightness == Brightness.light
         ? buildNavigationBarThemeLight(colorScheme)

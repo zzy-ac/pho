@@ -142,9 +142,9 @@ const floatingActionButtonThemeLight = FloatingActionButtonThemeData();
 
 
 List<Color> seedThemeColors = [
-  const Color(0xFF02FED1),
+  const Color(0xFF1677FF), // 蓝色（默认主题色）
+  const Color(0xFF02FED1), // 青绿
   const Color(0xFFFF2C55), // 玫瑰红
-  const Color(0xFF007BFF), // 蓝色
   const Color(0xFFFF9500), // 橙色
   const Color(0xFFFFCC00), // 黄色
   const Color(0xFF5AC8FA), // 青色
